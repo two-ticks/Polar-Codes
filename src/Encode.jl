@@ -15,14 +15,22 @@ returns: encoded message
 function encode(message, N)
 
     K = length(message)
+    n = 4; #log2(N);    # number of stages
 
     QN = Q[Q .<= N];      # pick positions having value <= N from Reliability Sequence
 
-    u = zeros(N);         # initialize codeword
+    u = zeros(Int, N)        # initialize codeword
     u[QN[N-K+1:end]] = message; # insert message bits at the end of codeword
     
     # iterative encoding
-    
+    m=1;
+    for d = n-1:-1:0
+        for i = 1:2^m:N
+            u[i : i + 2 * m - 1] = reshape([mod.(u[i:i+m-1] + u[i + m : i + 2 * m - 1], 2) u[i + m : i + 2 * m - 1]], 2 * m);
+        end
+        m = m+1;
+    end
 
+    return u
 
 end
