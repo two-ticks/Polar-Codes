@@ -1,5 +1,12 @@
 module PolarCodes
 
-greet() = print("Hello World!")
+include("Encode.jl")
+include("Decode.jl")
 
-end # module PolarCodes
+N = 16;
+K = 8;
+
+message = rand(Bool, K);
+codeword = encode(message, N);
+
+end 
