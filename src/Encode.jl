@@ -13,21 +13,22 @@ returns: encoded message
 ```
 function encode(message, N)
 
-    K = length(message)
-    n = 4 #log2(N);    # number of stages
+    K = length(message)                    # message length and N-K is frozen bits length
+    n = log2(N);                           # number of stages
 
-    QN = Q[Q.<=N]      # pick positions having value <= N from Reliability Sequence
+    QN = Q[Q.<=N]                          # pick positions having value <= N from Reliability Sequence
 
-    u = zeros(Int, N)        # initialize codeword
-    u[QN[N-K+1:end]] = message # insert message bits at the end of codeword
+    u = zeros(Int, N)                      # initialize codeword
+    u[QN[N-K+1:end]] = message             # insert message bits at high reliability positions
 
     # iterative encoding
-    m = 1
-    for d = n-1:-1:0
-        for i = 1:2*m:N
-            u[i:i+2*m-1] = reshape([mod.(u[i:i+m-1] + u[i+m:i+2*m-1], 2) u[i+m:i+2*m-1]], 2 * m) # update codeword
+    # m
+    bitsToCombine = 1
+    for depth = n-1:-1:0
+        for i = 1:2*bitsToCombine:N                    # combine bits in pairs
+            u[i:i+2*bitsToCombine-1] = reshape([mod.(u[i:i+bitsToCombine-1] + u[i+bitsToCombine:i+2*bitsToCombine-1], 2) u[i+bitsToCombine:i+2*bitsToCombine-1]], 2 * bitsToCombine) # update codeword
         end
-        m = m * 2
+        bitsToCombine = bitsToCombine * 2 # double the number of bits to combine in next stage
     end
 
     return u
