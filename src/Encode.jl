@@ -22,7 +22,6 @@ function encode(message, N)
     u[QN[N-K+1:end]] = message             # insert message bits at high reliability positions
 
     # iterative encoding
-    # m
     bitsToCombine = 1
     for depth = n-1:-1:0
         for i = 1:2*bitsToCombine:N                    # combine bits in pairs
