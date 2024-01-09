@@ -19,14 +19,27 @@ function decode(receivedCodeword, K)
     done = false
 
     while !done
-        nodePosition = (2^depth - 1) + node + 1 # position of node in node state vector
-        if nodeState[nodePosition] == 0
-            Ln = L[depth+1, nodePosition]
+        # leaf node
+        if depth == log2(N)
+            
         else
-            if nodeState[nodePosition] == 1
-                L[depth+1, nodePosition] = L[depth, nodePosition]
+            nodePosition = (2^depth - 1) + node + 1 # position of node in node state vector
+            if nodeState[nodePosition] == 0
+                temp = 2^(log2(N) - depth)
+                Ln = L[depth+1, temp * node + 1:temp * (node + 1)] # belief of node
+                a  = Ln[1:temp/2]
+                b  = Ln[temp/2 + 1:end]
+                node = node * 2; depth += 1; # go to left child
+                temp = temp / 2;
+                L[depth+1, temp * node + 1:temp * (node + 1)] = f(a, b) # min-sum 
+                nodeState[nodePosition] = 1
             else
-                L[depth+1, nodePosition] = 1 - L[depth, nodePosition]
+                if nodeState[nodePosition] == 1
+
+                    L[depth+1, nodePosition] = L[depth, nodePosition]
+                else
+                    L[depth+1, nodePosition] = 1 - L[depth, nodePosition]
+                end
             end
         end
     end
