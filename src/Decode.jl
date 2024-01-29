@@ -1,4 +1,3 @@
-
 function f(a, b)
     return (1 .- 2 .* (a .< 0)) .* (1 .- 2 .* (b .< 0)) .* min.(abs.(a), abs.(b))
 end
