@@ -23,4 +23,7 @@ receivedCodeword = modulatedCodeword + σ * randn(N); # AWGN Channel
 
 decodedMessage = decode(receivedCodeword, K);
 
+println("Decoded Message: ", decodedMessage);
+println("Error: ", sum(abs.(message - decodedMessage)));
+
 end
