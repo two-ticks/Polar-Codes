@@ -6,7 +6,7 @@ function g(a, b, c)
     return b .+ (1 .- 2 .* c) .* a
 end
 
-function decode(receivedCodeword, K)
+function decode(receivedCodeword, K::Int)
     N = length(receivedCodeword)
     L = zeros(Int(log2(N) + 1), N)
     nodeState = zeros(1, 2 * N - 1)
@@ -103,4 +103,11 @@ function decode(receivedCodeword, K)
 
     QN = Q[Q.<=N]
     return u_hat[n+1, QN[N-K+1:end]]
+end
+
+
+function successiveCancellationDecode(receivedCodeword, K::Int, L::Int, crcPoly)
+    
+
+
 end
